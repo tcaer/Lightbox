@@ -1,0 +1,16 @@
+[package]
+name = "lbx"
+version = "0.1.0"
+authors = ["Tino Caer <tino.caer@me.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "lightbox"
+path = "src/lib.rs"
+
+[dependencies]
+glfw = "0.38.0"
+gl = "0.14.0"
+cgmath = "0.17.0"
