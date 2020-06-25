@@ -1,3 +1,5 @@
+use crate::KeyCode;
+
 use std::any::Any;
 
 #[derive(PartialEq)]
@@ -136,6 +138,60 @@ impl Event for WindowResizeEvent {
 /* Key Events */
 pub struct KeyPressedEvent {
 
+  m_key: KeyCode,
+  m_repeat_count: u32
 
+}
+impl KeyPressedEvent {
+
+  pub fn new(key: KeyCode, repeat_count: u32) -> KeyPressedEvent {
+    return KeyPressedEvent {
+      m_key: key,
+      m_repeat_count: repeat_count
+    };
+  }
+
+}
+impl Event for KeyPressedEvent {
+
+  fn get_type(&self) -> EventType {
+    return EventType::KeyPressed;
+  }
+  fn get_category(&self) -> EventCategory {
+    return EventCategory::Keyboard;
+  }
+
+  fn get_data(&self) -> Option<Box<dyn Any>> {
+    return Some(Box::new((self.m_key, self.m_repeat_count)));
+  }
+
+}
+
+pub struct KeyReleasedEvent {
+
+  m_key: KeyCode
+
+}
+impl KeyReleasedEvent {
+
+  pub fn new(key: KeyCode) -> KeyReleasedEvent {
+    return KeyReleasedEvent {
+      m_key: key
+    };
+  }
+
+}
+impl Event for KeyReleasedEvent {
+
+  fn get_type(&self) -> EventType {
+    return EventType::KeyReleased;
+  }
+  fn get_category(&self) -> EventCategory {
+    return EventCategory::Keyboard;
+  }
+
+  fn get_data(&self) -> Option<Box<dyn Any>> {
+    return Some(Box::new(self.m_key));
+  }
 
 }

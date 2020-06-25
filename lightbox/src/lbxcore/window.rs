@@ -1,8 +1,8 @@
-use crate::glfw::Context;
+use crate::glfw::{Context, Action};
 use std::sync::mpsc::Receiver;
 
 use crate::{EventStack, EventType};
-use crate::event::{WindowResizeEvent};
+use crate::event::{WindowResizeEvent, KeyPressedEvent, KeyReleasedEvent};
 
 pub struct Window {
 
@@ -58,6 +58,29 @@ impl Window {
           event_stack.remove_event_by_type(EventType::WindowResize);
           let resize_event = WindowResizeEvent::new(width, height);
           event_stack.add_event(Box::new(resize_event));
+        },
+        glfw::WindowEvent::Key(key, _scancode, action, _modifiers) => {
+          let raw_key = key as i32;
+          match action {
+            Action::Press => {
+              if let Some(key) = num::FromPrimitive::from_i32(raw_key) {
+                let pressed_event = KeyPressedEvent::new(key, 0);
+                event_stack.add_event(Box::new(pressed_event));
+              }
+            },
+            Action::Repeat => {
+              if let Some(key) = num::FromPrimitive::from_i32(raw_key) {
+                let pressed_event = KeyPressedEvent::new(key, 1);
+                event_stack.add_event(Box::new(pressed_event));
+              }
+            },
+            Action::Release => {
+              if let Some(key) = num::FromPrimitive::from_i32(raw_key) {
+                let released_event = KeyReleasedEvent::new(key);
+                event_stack.add_event(Box::new(released_event));
+              }
+            }
+          }
         },
         _ => {}
       }
