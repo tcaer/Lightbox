@@ -7,6 +7,7 @@ extern crate num_derive;
 pub mod lbxcore;
 pub mod event;
 pub mod input;
+pub mod lbxgl;
 
 pub use lbxcore::window::Window;
 

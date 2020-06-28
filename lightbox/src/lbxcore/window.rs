@@ -54,7 +54,7 @@ impl Window {
 
     for (_, event) in glfw::flush_messages(&self.glfw_events) {
       match event {
-        glfw::WindowEvent::Size(width, height) => {
+        glfw::WindowEvent::FramebufferSize(width, height) => {
           event_stack.remove_event_by_type(EventType::WindowResize);
           let resize_event = WindowResizeEvent::new(width, height);
           event_stack.add_event(Box::new(resize_event));

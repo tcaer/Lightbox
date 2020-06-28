@@ -7,11 +7,11 @@ fn main() {
   while !window.should_close() {
     window.poll_events(&mut event_stack);
 
-    /*if let Some(raw_data) = event_stack.get_event_by_type(lbx::EventType::WindowResize) {
+    if let Some(raw_data) = event_stack.get_event_by_type(lbx::EventType::WindowResize) {
       if let Some((width, height)) = raw_data.downcast_ref::<(i32, i32)>() {
-        println!("{}, {}", width, height);
+        lbx::lbxgl::set_viewport(*width, *height);
       }
-    }*/
+    }
 
     /*let keys_pressed = event_stack.get_events_by_type(lbx::EventType::KeyPressed);
     for raw_key in keys_pressed.iter() {
