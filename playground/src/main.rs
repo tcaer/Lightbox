@@ -4,12 +4,15 @@ fn main() {
   let mut window = lbx::Window::create("lbx window", 1280, 720);
   let mut event_stack = lbx::EventStack::new();
 
+  lbx::gl::clear_color(0.1, 0.1, 0.1, 0.1);
+
   while !window.should_close() {
     window.poll_events(&mut event_stack);
+    lbx::gl::clear_color_depth_buffers();
 
     if let Some(raw_data) = event_stack.get_event_by_type(lbx::EventType::WindowResize) {
       if let Some((width, height)) = raw_data.downcast_ref::<(i32, i32)>() {
-        lbx::lbxgl::set_viewport(*width, *height);
+        lbx::gl::set_viewport(*width, *height);
       }
     }
 

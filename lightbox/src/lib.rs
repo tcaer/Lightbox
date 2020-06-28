@@ -1,5 +1,4 @@
 extern crate glfw;
-extern crate gl;
 extern crate num;
 #[macro_use]
 extern crate num_derive;
@@ -7,7 +6,7 @@ extern crate num_derive;
 pub mod lbxcore;
 pub mod event;
 pub mod input;
-pub mod lbxgl;
+pub mod gl;
 
 pub use lbxcore::window::Window;
 
