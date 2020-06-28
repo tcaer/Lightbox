@@ -1,7 +1,8 @@
 use crate::glfw::{Context, Action};
 use std::sync::mpsc::Receiver;
 
-use crate::{EventStack, EventType};
+use crate::{EventStack, EventType, KeyCode};
+use crate::input::{convert_key_to_glfw};
 use crate::event::{WindowResizeEvent, KeyPressedEvent, KeyReleasedEvent};
 
 pub struct Window {
@@ -47,6 +48,15 @@ impl Window {
 
   pub fn get_size(&self) -> (i32, i32) {
     return self.glfw_window.get_size();
+  }
+
+  pub fn is_key_down(&self, key: KeyCode) -> bool {
+    let action = self.glfw_window.get_key(convert_key_to_glfw(key));
+
+    match action {
+      glfw::Action::Press => return true,
+      _ => return false
+    }
   }
 
   pub fn poll_events(&self, event_stack: &mut EventStack) {
