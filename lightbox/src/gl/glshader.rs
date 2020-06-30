@@ -1,22 +1,38 @@
 use gl;
 use std::ffi::CString;
 
-struct GlShader {
+#[allow(dead_code)]
+pub struct GlShader {
 
-  id: u32
+  id: u32,
+  name: String
   
 }
 impl GlShader {
 
-  pub fn new(vert_src: &str, frag_src: &str) -> GlShader {
+  pub fn new(name: &str, vert_src: &str, frag_src: &str) -> GlShader {
     let id = GlShader::compile_shaders(&vert_src, &frag_src);
 
     return GlShader {
-      id: id
+      id: id,
+      name: name.to_string()
     };
   }
 
+  pub fn bind(&self) {
+    unsafe {
+      gl::UseProgram(self.id);
+    }
+  }
+
+  pub fn unbind(&self) {
+    unsafe {
+      gl::UseProgram(0);
+    }
+  }
+
   fn compile_shaders(vert_src: &str, frag_src: &str) -> u32 {
+    #[allow(unused_assignments)]
     let (mut program_id, mut vert_id, mut frag_id) = (0, 0, 0);
 
     unsafe {
@@ -25,7 +41,7 @@ impl GlShader {
 
     if !GlShader::compile_shader(&mut vert_id, &vert_src, gl::VERTEX_SHADER) {
       GlShader::debug_shader(&mut vert_id);
-      return program_id;
+      return 0;
     } else {
       unsafe {
         gl::AttachShader(program_id, vert_id);
@@ -34,7 +50,7 @@ impl GlShader {
 
     if !GlShader::compile_shader(&mut frag_id, &frag_src, gl::FRAGMENT_SHADER) {
       GlShader::debug_shader(&mut frag_id);
-      return program_id;
+      return 0;
     } else {
       unsafe {
         gl::AttachShader(program_id, frag_id);
@@ -53,12 +69,13 @@ impl GlShader {
 
         let mut info_log = Vec::with_capacity(max_size as usize);
         gl::GetProgramInfoLog(program_id, max_size, std::ptr::null_mut(), info_log.as_mut_ptr() as *mut gl::types::GLchar);
+        println!("ERROR:\nProgram failed to link.\n{}", std::str::from_utf8(&info_log).unwrap());
 
         gl::DeleteProgram(program_id);
         gl::DeleteShader(vert_id);
         gl::DeleteShader(frag_id);
 
-        return program_id;
+        return 0;
       }
 
       gl::DetachShader(program_id, vert_id);
@@ -92,6 +109,7 @@ impl GlShader {
 
       let mut info_log = Vec::with_capacity(max_size as usize);
       gl::GetShaderInfoLog(*id, max_size, std::ptr::null_mut(), info_log.as_mut_ptr() as *mut gl::types::GLchar);
+      println!("ERROR:\nShader failed to compile.\n{}", std::str::from_utf8(&info_log).unwrap());
     }
   }
 

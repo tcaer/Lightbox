@@ -1,9 +1,12 @@
 use gl;
 mod glbuffer;
+mod glarray;
 mod glshader;
 
 pub use glbuffer::GlVertexBuffer;
 pub use glbuffer::GlIndexBuffer;
+pub use glarray::GlArray;
+pub use glshader::GlShader;
 
 /*
 * A wrapper for unsafe GL functions that are exposed to the client app and other internal modules
