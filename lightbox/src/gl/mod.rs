@@ -1,4 +1,8 @@
 use gl;
+mod buffer;
+
+pub use buffer::GlVertexBuffer;
+pub use buffer::GlIndexBuffer;
 
 /*
 * A wrapper for unsafe GL functions that are exposed to the client app and other internal modules
