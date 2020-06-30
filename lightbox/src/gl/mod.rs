@@ -1,8 +1,9 @@
 use gl;
-mod buffer;
+mod glbuffer;
+mod glshader;
 
-pub use buffer::GlVertexBuffer;
-pub use buffer::GlIndexBuffer;
+pub use glbuffer::GlVertexBuffer;
+pub use glbuffer::GlIndexBuffer;
 
 /*
 * A wrapper for unsafe GL functions that are exposed to the client app and other internal modules
@@ -22,5 +23,11 @@ pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
 pub fn set_viewport(width: i32, height: i32) {
   unsafe {
     gl::Viewport(0, 0, width, height);
+  }
+}
+
+pub fn draw_elements(count: i32) {
+  unsafe {
+    gl::DrawElements(gl::TRIANGLES, count, gl::UNSIGNED_INT, std::ptr::null());
   }
 }
