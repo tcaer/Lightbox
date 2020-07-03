@@ -23,6 +23,7 @@ void main() {
 fn main() {
   let mut window = lbx::Window::create("lbx window", 1280, 720);
   let mut event_stack = lbx::EventStack::new();
+  let mut camera = lbx::OrthoCamera::new_default(1280.0/720.0);
 
   lbx::gl::clear_color(0.1, 0.1, 0.1, 0.1);
 
@@ -50,17 +51,11 @@ fn main() {
     }
 
     shader.bind();
+    
     vao.bind();
     lbx::gl::draw_elements(6);
 
     shader.unbind();
-
-    /*let keys_pressed = event_stack.get_events_by_type(lbx::EventType::KeyPressed);
-    for raw_key in keys_pressed.iter() {
-      if let Some((key, repeat_count)) = raw_key.downcast_ref::<(lbx::KeyCode, u32)>() {
-        println!("Key Pressed Event: {}, {}", *key as i32, repeat_count);
-      }
-    }*/
 
     window.update();
   }
