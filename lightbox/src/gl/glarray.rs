@@ -45,3 +45,12 @@ impl GlArray {
   }
 
 }
+impl Drop for GlArray {
+
+  fn drop(&mut self) {
+    unsafe {
+      gl::DeleteVertexArrays(1, &self.id);
+    }
+  }
+
+}

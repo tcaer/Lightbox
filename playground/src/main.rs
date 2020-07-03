@@ -23,7 +23,7 @@ void main() {
 fn main() {
   let mut window = lbx::Window::create("lbx window", 1280, 720);
   let mut event_stack = lbx::EventStack::new();
-  let mut camera = lbx::OrthoCamera::new_default(1280.0/720.0);
+  let mut _camera = lbx::OrthoCamera::new_default(1280.0/720.0);
 
   lbx::gl::clear_color(0.1, 0.1, 0.1, 0.1);
 
@@ -51,7 +51,7 @@ fn main() {
     }
 
     shader.bind();
-    
+
     vao.bind();
     lbx::gl::draw_elements(6);
 

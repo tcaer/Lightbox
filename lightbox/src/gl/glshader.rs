@@ -178,7 +178,6 @@ impl GlShader {
   }
 
 }
-
 impl Drop for GlShader {
 
   fn drop(&mut self) {

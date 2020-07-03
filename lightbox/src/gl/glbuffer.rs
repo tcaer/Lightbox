@@ -58,6 +58,15 @@ impl GlVertexBuffer {
   }
 
 }
+impl Drop for GlVertexBuffer {
+
+  fn drop(&mut self) {
+    unsafe {
+      gl::DeleteBuffers(1, &self.id);
+    }
+  }
+
+}
 
 pub struct GlIndexBuffer {
 
@@ -90,6 +99,15 @@ impl GlIndexBuffer {
   pub fn unbind(&self) {
     unsafe {
       gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+    }
+  }
+
+}
+impl Drop for GlIndexBuffer {
+
+  fn drop(&mut self) {
+    unsafe {
+      gl::DeleteBuffers(1, &self.id);
     }
   }
 
