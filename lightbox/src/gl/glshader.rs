@@ -1,5 +1,6 @@
 use gl;
 use std::ffi::CString;
+use cgmath::{Vector2, Vector3, Vector4, Matrix, Matrix3, Matrix4};
 
 #[allow(dead_code)]
 pub struct GlShader {
@@ -28,6 +29,69 @@ impl GlShader {
   pub fn unbind(&self) {
     unsafe {
       gl::UseProgram(0);
+    }
+  }
+
+  pub fn set_int(&self, name: &str, value: i32) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::Uniform1i(location, value);
+    }
+  }
+
+  pub fn set_int_array(&self, name: &str, values: &Vec<i32>, count: i32) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::Uniform1iv(location, count, values.as_ptr());
+    }
+  }
+
+  pub fn set_float2(&self, name: &str, value: &Vector2<f32>) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::Uniform2f(location, value.x, value.y);
+    }
+  }
+
+  pub fn set_float3(&self, name: &str, value: &Vector3<f32>) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::Uniform3f(location, value.x, value.y, value.z);
+    }
+  }
+
+  pub fn set_float4(&self, name: &str, value: &Vector4<f32>) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::Uniform4f(location, value.x, value.y, value.z, value.w);
+    }
+  }
+
+  pub fn set_mat3(&self, name: &str, value: &Matrix3<f32>) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::UniformMatrix3fv(location, 1, gl::FALSE, value.as_ptr());
+    }
+  }
+
+  pub fn set_mat4(&self, name: &str, value: &Matrix4<f32>) {
+    let c_name = CString::new(name.as_bytes()).unwrap();
+
+    unsafe {
+      let location = gl::GetUniformLocation(self.id, c_name.as_ptr());
+      gl::UniformMatrix4fv(location, 1, gl::FALSE, value.as_ptr());
     }
   }
 
@@ -110,6 +174,16 @@ impl GlShader {
       let mut info_log = Vec::with_capacity(max_size as usize);
       gl::GetShaderInfoLog(*id, max_size, std::ptr::null_mut(), info_log.as_mut_ptr() as *mut gl::types::GLchar);
       println!("ERROR:\nShader failed to compile.\n{}", std::str::from_utf8(&info_log).unwrap());
+    }
+  }
+
+}
+
+impl Drop for GlShader {
+
+  fn drop(&mut self) {
+    unsafe {
+      gl::DeleteProgram(self.id);
     }
   }
 
